@@ -1,0 +1,67 @@
+
+  name: Discord Build Notification
+
+  on:
+    workflow_run:
+      workflows: ["LabyAddon Build"]
+      types:
+        - completed
+
+  jobs:
+    notify:
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      runs-on: ubuntu-latest
+
+      permissions:
+        actions: read
+
+      steps:
+        - name: Get Artifact
+          id: artifact
+          env:
+            GH_TOKEN: ${{ github.token }}
+            RUN_ID: ${{ github.event.workflow_run.id }}
+            REPOSITORY: ${{ github.event.workflow_run.repository.name }}
+          run: |
+            BUILD_ID=$(curl -s \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/LabyAddons/$REPOSITORY/actions/runs/$RUN_ID/artifacts" \
+              | jq -r '.artifacts[] | select(.name == "Artifacts") | .id')
+            
+            echo "build_id=$BUILD_ID" >> "$GITHUB_OUTPUT"
+
+        - name: Send Discord Webhook
+          env:
+            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            REPOSITORY: ${{ github.event.workflow_run.repository.name }}
+            RUN_ID: ${{ github.event.workflow_run.id }}
+            BUILD_ID: ${{ steps.artifact.outputs.build_id }}
+            BUILD_NUMBER: ${{ github.event.workflow_run.run_number }}
+          run: |
+            DOWNLOAD_URL="https://github.com/LabyAddons/${REPOSITORY}/actions/runs/${RUN_ID}/artifacts/${BUILD_ID}"
+            
+            curl -H "Content-Type: application/json" \
+              -X POST \
+              -d "{
+                \"username\": \"LabyAddon Github\",
+                \"avatar_url\": \"https://avatars.githubusercontent.com/u/205626306\",
+                \"embeds\": [{
+                  \"title\": \"✅ LabyAddon • ${REPOSITORY} (#${BUILD_NUMBER})\",
+                  \"description\": \"Der Build wurde erfolgreich erstellt!\",
+                  \"color\": 5763719,
+                  \"fields\": [
+                    {
+                      \"name\": \"⬇️ Download\",
+                      \"value\": \"[**• Klick hier •**](${DOWNLOAD_URL})\",
+                      \"inline\": false
+                    }
+                  ],
+                  \"footer\": {
+                    \"text\": \"GitHub • LabyAddon\",
+                    \"icon_url\": \"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\"
+                  }
+                }]
+              }" \
+              "$DISCORD_WEBHOOK"
+
