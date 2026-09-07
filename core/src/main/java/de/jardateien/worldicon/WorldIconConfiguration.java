@@ -27,8 +27,15 @@ public class WorldIconConfiguration extends AddonConfig {
     Laby.references().chatExecutor().openUrl("https://discord.gg/Mf7HtkqPZZ");
   }
 
+  @SwitchSetting
+  private final ConfigProperty<Boolean> playTime = new ConfigProperty<>(true);
+
   @Override
   public ConfigProperty<Boolean> enabled() {
     return this.enabled;
+  }
+
+  public ConfigProperty<Boolean> playTime() {
+    return this.playTime;
   }
 }
