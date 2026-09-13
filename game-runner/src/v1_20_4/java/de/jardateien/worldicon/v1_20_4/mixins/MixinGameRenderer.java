@@ -32,7 +32,7 @@ public abstract class MixinGameRenderer {
           opcode = Opcodes.GETFIELD)
   )
   private boolean hasWorldScreenshot(GameRenderer instance) {
-    if(WorldIconAddon.instance.configuration().enabled().get()) {
+    if(WorldIconAddon.instance.configuration().enabled().get()&& WorldIconAddon.instance.configuration().worldIcon().get()) {
       return this.updateWorldIcon$screenshot;
     }
 

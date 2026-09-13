@@ -12,7 +12,18 @@
       "header": {
         "general": {
           "name": "General"
+        },
+        "settings": {
+          "name": "Settings"
         }
+      },
+      "playTime": {
+        "name": "Show Playtime",
+        "description": "Displays the total playtime for each world in the world selection screen."
+      },
+      "worldIcon": {
+        "name": "Update World Icons",
+        "description": "Updates world icons when entering a world to keep them up to date."
       }
     }
   }

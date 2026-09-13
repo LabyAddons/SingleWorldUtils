@@ -21,7 +21,7 @@ public abstract class MixinGameRenderer {
       at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isWorldIconSet()Z")
   )
   private boolean tryTakeScreenshotIfNeeded(IntegratedServer instance) {
-    if(WorldIconAddon.instance.configuration().enabled().get()) {
+    if(WorldIconAddon.instance.configuration().enabled().get() && WorldIconAddon.instance.configuration().worldIcon().get()) {
       return this.updateWorldIcon$screenshot;
     }
 
@@ -33,7 +33,7 @@ public abstract class MixinGameRenderer {
       at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isWorldIconSet()Z")
   )
   private boolean hasWorldScreenshot(IntegratedServer instance) {
-    if(WorldIconAddon.instance.configuration().enabled().get()) {
+    if(WorldIconAddon.instance.configuration().enabled().get() && WorldIconAddon.instance.configuration().worldIcon().get()) {
       return this.updateWorldIcon$screenshot;
     }
 

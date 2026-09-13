@@ -27,6 +27,11 @@ public class WorldIconConfiguration extends AddonConfig {
     Laby.references().chatExecutor().openUrl("https://discord.gg/Mf7HtkqPZZ");
   }
 
+  @SettingSection(value = "settings")
+  @SpriteSlot(x = 3)
+  @SwitchSetting
+  private final ConfigProperty<Boolean> worldIcon = new ConfigProperty<>(true);
+  @SpriteSlot(x = 2)
   @SwitchSetting
   private final ConfigProperty<Boolean> playTime = new ConfigProperty<>(true);
 
@@ -34,7 +39,9 @@ public class WorldIconConfiguration extends AddonConfig {
   public ConfigProperty<Boolean> enabled() {
     return this.enabled;
   }
-
+  public ConfigProperty<Boolean> worldIcon() {
+    return this.worldIcon;
+  }
   public ConfigProperty<Boolean> playTime() {
     return this.playTime;
   }
