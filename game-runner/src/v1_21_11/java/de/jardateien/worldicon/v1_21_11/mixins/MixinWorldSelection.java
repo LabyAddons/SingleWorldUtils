@@ -3,6 +3,7 @@ package de.jardateien.worldicon.v1_21_11.mixins;
 import de.jardateien.worldicon.WorldIconAddon;
 import de.jardateien.worldicon.utils.TimeUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.User;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
 import net.minecraft.world.level.storage.LevelSummary;
@@ -20,6 +21,10 @@ public class MixinWorldSelection {
   @Final
   LevelSummary summary;
 
+  @Shadow
+  @Final
+  private Minecraft minecraft;
+
   @Inject(method = "renderContent", at = @At("TAIL"))
   private void render(GuiGraphics $$0, int $$1, int $$2, boolean $$3, float $$4, CallbackInfo ci) {
     if(!WorldIconAddon.instance.configuration().enabled().get() || !WorldIconAddon.instance.configuration().playTime().get())
@@ -29,7 +34,17 @@ public class MixinWorldSelection {
     if(entry == null)
       return;
 
-    $$0.drawString(Minecraft.getInstance().font, TimeUtils.formatPlaytime(this.summary.getLastPlayed()), entry.getContentX()+ 150, entry.getContentY(), 0xFFAAAAAA);
+    User user = this.minecraft.getUser();
+    if(user == null)
+      return;
+
+    long playtime = TimeUtils.getPlaytime(
+        this.minecraft.gameDirectory,
+        this.summary.getLevelId(),
+        user.getProfileId()
+    );
+
+    $$0.drawString(this.minecraft.font, TimeUtils.formatPlaytime(playtime), entry.getContentX() + 150, entry.getContentY(), 0xFFAAAAAA);
   }
 
 }
