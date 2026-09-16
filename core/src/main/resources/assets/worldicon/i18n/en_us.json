@@ -2,11 +2,12 @@
   "worldicon": {
     "settings": {
       "enabled": {
-        "name": "Enabled"
+        "name": "Enabled",
+        "description": "Enables or disables the addon."
       },
       "joinDiscord": {
         "name": "Discord Server",
-        "text": "Join",
+        "text": "Join for news",
         "description": "Click to join the Discord"
       },
       "header": {
@@ -24,6 +25,10 @@
       "worldIcon": {
         "name": "Update World Icons",
         "description": "Updates world icons when entering a world to keep them up to date."
+      },
+      "unpaused": {
+        "name": "Unpaused",
+        "description": "Keeps the game running even when the pause menu is open."
       }
     }
   }

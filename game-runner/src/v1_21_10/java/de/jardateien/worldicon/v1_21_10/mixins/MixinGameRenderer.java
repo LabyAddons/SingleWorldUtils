@@ -1,6 +1,6 @@
 package de.jardateien.worldicon.v1_21_10.mixins;
 
-import de.jardateien.worldicon.WorldIconAddon;
+import de.jardateien.worldicon.WorldUtils;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.server.IntegratedServer;
 import org.objectweb.asm.Opcodes;
@@ -33,7 +33,7 @@ public abstract class MixinGameRenderer {
           opcode = Opcodes.GETFIELD)
   )
   private boolean hasWorldScreenshot(GameRenderer instance) {
-    if(WorldIconAddon.instance.configuration().enabled().get()&& WorldIconAddon.instance.configuration().worldIcon().get()) {
+    if(WorldUtils.instance.configuration().enabled().get()&& WorldUtils.instance.configuration().worldIcon().get()) {
       return this.updateWorldIcon$screenshot;
     }
 

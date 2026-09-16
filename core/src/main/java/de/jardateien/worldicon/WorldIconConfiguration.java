@@ -31,9 +31,12 @@ public class WorldIconConfiguration extends AddonConfig {
   @SpriteSlot(x = 3)
   @SwitchSetting
   private final ConfigProperty<Boolean> worldIcon = new ConfigProperty<>(true);
-  @SpriteSlot(x = 2)
+  @SpriteSlot(x = 5)
   @SwitchSetting
   private final ConfigProperty<Boolean> playTime = new ConfigProperty<>(true);
+  @SpriteSlot(x = 4)
+  @SwitchSetting
+  private final ConfigProperty<Boolean> unpaused = new ConfigProperty<>(true);
 
   @Override
   public ConfigProperty<Boolean> enabled() {
@@ -44,5 +47,8 @@ public class WorldIconConfiguration extends AddonConfig {
   }
   public ConfigProperty<Boolean> playTime() {
     return this.playTime;
+  }
+  public ConfigProperty<Boolean> unpaused() {
+    return this.unpaused;
   }
 }
