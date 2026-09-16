@@ -1,7 +1,7 @@
 package de.jardateien.worldicon.v1_12_2.mixins;
 
 import com.mojang.authlib.GameProfile;
-import de.jardateien.worldicon.WorldIconAddon;
+import de.jardateien.worldicon.WorldUtils;
 import de.jardateien.worldicon.utils.TimeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListWorldSelectionEntry;
@@ -26,14 +26,20 @@ public class MixinWorldSelection {
 
   @Inject(method = "drawEntry", at = @At("TAIL"))
   private void drawEntry(int lvt_1_1_, int lvt_2_1_, int lvt_3_1_, int lvt_4_1_, int lvt_5_1_, int lvt_6_1_, int lvt_7_1_, boolean lvt_8_1_, float lvt_9_1_, CallbackInfo ci) {
-    if(!WorldIconAddon.instance.configuration().enabled().get() || !WorldIconAddon.instance.configuration().playTime().get())
+    if(!WorldUtils.instance.configuration().enabled().get() || !WorldUtils.instance.configuration().playTime().get())
       return;
 
     GameProfile profile = this.client.getSession().getProfile();
     if(profile == null)
       return;
 
-    long playtime = TimeUtils.getPlaytime(this.client.gameDir, this.worldSummary.getFileName(), profile.getId());
+    long playtime = TimeUtils.getPlaytime(
+        this.client.getSaveLoader().getSaveLoader(
+            this.worldSummary.getFileName(),
+            false
+        ).getWorldDirectory().toPath(),
+        profile.getId());
+
     this.client.fontRenderer.drawString(TimeUtils.formatPlaytime(playtime), lvt_2_1_ + 150, lvt_3_1_, 0xFFAAAAAA);
   }
 

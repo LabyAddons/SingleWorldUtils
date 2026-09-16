@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 
 public class TimeUtils {
@@ -28,18 +29,14 @@ public class TimeUtils {
     return String.format("%02d:%02d", minutes, seconds);
   }
 
-  public static long getPlaytime(File gameDirectory, String worldName, UUID playerUuid) {
-    File statsFile = new File(
-        gameDirectory,
-        "saves/" + worldName + "/stats/" + playerUuid + ".json"
-    );
-
-    if (!statsFile.exists()) {
-      return 0L;
+  public static long getPlaytime(Path path, UUID uuid) {
+    Path stats = path.resolve("stats").resolve(uuid + ".json");
+    if(Files.notExists(stats)) {
+      return 0;
     }
 
     try {
-      String json = Files.readString(statsFile.toPath());
+      String json = Files.readString(stats);
       JsonObject root = JsonParser.parseString(json).getAsJsonObject();
 
       // 1.8 - 1.12
@@ -59,8 +56,7 @@ public class TimeUtils {
       }
 
     } catch (IOException | RuntimeException ignored) {}
-
-    return 0L;
+    return 0;
   }
 
 }

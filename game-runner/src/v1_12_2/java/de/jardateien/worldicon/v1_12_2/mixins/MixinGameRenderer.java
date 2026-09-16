@@ -1,6 +1,6 @@
 package de.jardateien.worldicon.v1_12_2.mixins;
 
-import de.jardateien.worldicon.WorldIconAddon;
+import de.jardateien.worldicon.WorldUtils;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.server.integrated.IntegratedServer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ public abstract class MixinGameRenderer {
       at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isWorldIconSet()Z")
   )
   private boolean tryTakeScreenshotIfNeeded(IntegratedServer instance) {
-    if(WorldIconAddon.instance.configuration().enabled().get() && WorldIconAddon.instance.configuration().worldIcon().get()) {
+    if(WorldUtils.instance.configuration().enabled().get() && WorldUtils.instance.configuration().worldIcon().get()) {
       return this.updateWorldIcon$screenshot;
     }
 
@@ -33,7 +33,7 @@ public abstract class MixinGameRenderer {
       at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isWorldIconSet()Z")
   )
   private boolean hasWorldScreenshot(IntegratedServer instance) {
-    if(WorldIconAddon.instance.configuration().enabled().get() && WorldIconAddon.instance.configuration().worldIcon().get()) {
+    if(WorldUtils.instance.configuration().enabled().get() && WorldUtils.instance.configuration().worldIcon().get()) {
       return this.updateWorldIcon$screenshot;
     }
 
