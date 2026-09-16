@@ -5,11 +5,11 @@ plugins {
 
 val versions = providers.gradleProperty("net.labymod.minecraft-versions").get().split(";")
 
-group = "de.jardateien.worldicon"
+group = "de.jardateien.singleworldutils"
 version = providers.environmentVariable("VERSION").getOrElse("1.0.0")
 
 labyMod {
-    defaultPackageName = "de.jardateien.worldicon"
+    defaultPackageName = "de.jardateien.singleworldutils"
 
     minecraft {
         registerVersion(versions.toTypedArray()) {

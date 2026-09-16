@@ -1,4 +1,4 @@
-rootProject.name = "WorldIcon"
+rootProject.name = "SingleWorldUtils"
 
 pluginManagement {
     repositories {
