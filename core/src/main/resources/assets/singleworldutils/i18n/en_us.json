@@ -1,0 +1,35 @@
+{
+  "singleworldutils": {
+    "settings": {
+      "enabled": {
+        "name": "Enabled",
+        "description": "Enables or disables the addon."
+      },
+      "joinDiscord": {
+        "name": "Discord Server",
+        "text": "Join for news",
+        "description": "Click to join the Discord"
+      },
+      "header": {
+        "general": {
+          "name": "General"
+        },
+        "settings": {
+          "name": "Settings"
+        }
+      },
+      "playTime": {
+        "name": "Show Playtime",
+        "description": "Displays the total playtime for each world in the world selection screen."
+      },
+      "worldIcon": {
+        "name": "Update World Icons",
+        "description": "Updates world icons when entering a world to keep them up to date."
+      },
+      "unpaused": {
+        "name": "Unpaused",
+        "description": "Keeps the game running even when the pause menu is open."
+      }
+    }
+  }
+}
