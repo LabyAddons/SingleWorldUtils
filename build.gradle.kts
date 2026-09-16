@@ -22,10 +22,10 @@ labyMod {
     }
 
     addonInfo {
-        namespace = "worldicon"
-        displayName = "WorldIcon"
+        namespace = "singleworldutils"
+        displayName = "SingleWorldUtils"
         author = "JarDateien"
-        description = "Makes the singleplayer world icon regenerate each time the world is loaded, instead of keeping the first icon forever."
+        description = "Improve your Minecraft singleplayer experience with useful utilities and quality-of-life features for your worlds."
         minecraftVersion = "*"
         version = rootProject.version.toString()
     }
