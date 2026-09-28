@@ -42,6 +42,7 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   @SwitchSetting
   private final ConfigProperty<Boolean> customSaves = new ConfigProperty<>(true);
   @SettingRequires(value = "customSaves")
+  @SpriteSlot(x = 1)
   @TextFieldSetting
   private final ConfigProperty<String> customSavesPath = new ConfigProperty<>("customSaves");
 
@@ -59,11 +60,10 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
     return this.unpaused;
   }
 
-  public ConfigProperty<Boolean> customSaves() {
-    return this.customSaves;
-  }
-
   public ConfigProperty<String> customSavesPath() {
     return this.customSavesPath;
+  }
+  public ConfigProperty<Boolean> customSaves() {
+    return this.customSaves;
   }
 }

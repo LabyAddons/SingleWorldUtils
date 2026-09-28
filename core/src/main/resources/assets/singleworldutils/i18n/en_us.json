@@ -29,6 +29,14 @@
       "unpaused": {
         "name": "Unpaused",
         "description": "Keeps the game running even when the pause menu is open."
+      },
+      "customSaves": {
+        "name": "Custom Saves",
+        "description": ""
+      },
+      "savePath": {
+        "name": "Save Path",
+        "description": ""
       }
     }
   }
