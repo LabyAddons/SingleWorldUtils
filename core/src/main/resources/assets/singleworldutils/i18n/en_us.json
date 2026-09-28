@@ -7,7 +7,7 @@
       },
       "joinDiscord": {
         "name": "Discord Server",
-        "text": "Join for news",
+        "text": "Join",
         "description": "Click to join the Discord"
       },
       "header": {
@@ -16,6 +16,9 @@
         },
         "settings": {
           "name": "Settings"
+        },
+        "saves": {
+          "name": "Saves"
         }
       },
       "playTime": {
@@ -30,13 +33,17 @@
         "name": "Unpaused",
         "description": "Keeps the game running even when the pause menu is open."
       },
+      "backup": {
+        "name": "Backup",
+        "description": "Automatically creates a backup of your world when you leave it."
+      },
       "customSaves": {
         "name": "Custom Saves",
-        "description": ""
+        "description": "Custom location for your Minecraft worlds."
       },
-      "savePath": {
+      "customSavesPath": {
         "name": "Save Path",
-        "description": ""
+        "description": "Set the folder where your Minecraft worlds are stored."
       }
     }
   }

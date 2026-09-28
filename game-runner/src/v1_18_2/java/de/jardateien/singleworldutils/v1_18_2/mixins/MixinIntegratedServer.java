@@ -30,18 +30,26 @@ public class MixinIntegratedServer {
   )
   private void singleWorldUtils$backupWorld(CallbackInfo ci) {
     Path path = this.singleWorldUtils$pathSaves();
+    if (path == null)
+      return;
+
     WorldBackupUtils.createBackup(path.resolve(this.storageSource.getLevelId()), path.resolve("backups"));
   }
 
   @Unique
   private Path singleWorldUtils$pathSaves() {
     SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
-    String customPath = configuration.customSavesPath().get();
-    if(configuration.enabled().get() && configuration.customSaves().get() && !customPath.isBlank()) {
-      return Paths.get(customPath).resolve("saves");
-    } else {
-      return Paths.get(Minecraft.getInstance().gameDirectory.getPath()).resolve("saves");
+
+    if(configuration.enabled().get() && configuration.backup().get()) {
+      String customPath = configuration.customSavesPath().get();
+      if(configuration.customSaves().get() && !customPath.isBlank()) {
+        return Paths.get(customPath).resolve("saves");
+      } else {
+        return Paths.get(Minecraft.getInstance().gameDirectory.getPath()).resolve("saves");
+      }
     }
+
+    return null;
   }
 
 }

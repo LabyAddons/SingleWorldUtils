@@ -36,13 +36,19 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   @SpriteSlot(x = 5)
   @SwitchSetting
   private final ConfigProperty<Boolean> playTime = new ConfigProperty<>(true);
-  @SpriteSlot(x = 4)
+  @SpriteSlot(x = 6)
   @SwitchSetting
   private final ConfigProperty<Boolean> unpaused = new ConfigProperty<>(true);
+  @SpriteSlot(x = 2)
+  @SwitchSetting
+  private final ConfigProperty<Boolean> backup = new ConfigProperty<>(true);
+
+  @SettingSection(value = "saves")
+  @SpriteSlot(x = 7)
   @SwitchSetting
   private final ConfigProperty<Boolean> customSaves = new ConfigProperty<>(true);
   @SettingRequires(value = "customSaves")
-  @SpriteSlot(x = 1)
+  @SpriteSlot(x = 4)
   @TextFieldSetting
   private final ConfigProperty<String> customSavesPath = new ConfigProperty<>("customSaves");
 
@@ -58,6 +64,10 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   }
   public ConfigProperty<Boolean> unpaused() {
     return this.unpaused;
+  }
+
+  public ConfigProperty<Boolean> backup() {
+    return this.backup;
   }
 
   public ConfigProperty<String> customSavesPath() {
