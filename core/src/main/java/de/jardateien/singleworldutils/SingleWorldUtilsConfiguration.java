@@ -26,7 +26,7 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   @MethodOrder(after = "enabled")
   @ButtonSetting
   public void joinDiscord() {
-    Laby.references().chatExecutor().openUrl("https://discord.gg/Mf7HtkqPZZ");
+    Laby.references().chatExecutor().openUrl("https://discord.gg/NQPQGRkFYG");
   }
 
   @SettingSection(value = "settings")
