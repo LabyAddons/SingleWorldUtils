@@ -31,3 +31,8 @@ No unnecessary changes. No bloated menus. Just a collection of small features de
 <p align="center">
   Made with ❤️ for singleplayer.
 </p>
+<div align="center">
+  <a href="https://discord.gg/NQPQGRkFYG">
+    <img src="https://invidget.switchblade.xyz/NQPQGRkFYG" alt="Join our Discord">
+  </a>
+</div>
