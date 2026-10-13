@@ -1,6 +1,10 @@
 package de.jardateien.singleworldutils.v1_21.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import de.jardateien.singleworldutils.SingleWorldUtils;
+import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.server.IntegratedServer;
 import org.objectweb.asm.Opcodes;
@@ -9,7 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.nio.file.Path;
@@ -21,31 +24,35 @@ public abstract class MixinGameRenderer {
   @Shadow
   protected abstract void takeAutoScreenshot(Path $$0);
 
-  @Shadow
-  private boolean hasWorldScreenshot;
   @Unique
   private boolean updateWorldIcon$screenshot;
 
-  @Redirect(
+  @ModifyExpressionValue(
       method = "tryTakeScreenshotIfNeeded",
       at = @At(value = "FIELD",
           target = "Lnet/minecraft/client/renderer/GameRenderer;hasWorldScreenshot:Z",
           opcode = Opcodes.GETFIELD)
   )
-  private boolean hasWorldScreenshot(GameRenderer instance) {
-    if(SingleWorldUtils.instance.configuration().enabled().get()&& SingleWorldUtils.instance.configuration().worldIcon().get()) {
+  private boolean hasWorldScreenshot(boolean original) {
+    if(this.singleWorldUtils$updateWorldIcon()) {
       return this.updateWorldIcon$screenshot;
     }
 
-    return this.hasWorldScreenshot;
+    return original;
   }
 
-  @Redirect(
+  @WrapOperation(
       method = "tryTakeScreenshotIfNeeded",
       at = @At(value = "INVOKE", target = "Lnet/minecraft/client/server/IntegratedServer;getWorldScreenshotFile()Ljava/util/Optional;")
   )
-  private Optional<Path> tryTakeScreenshotIfNeeded(IntegratedServer server) {
-    server.getWorldScreenshotFile().ifPresent(this::takeAutoScreenshot);
+  private Optional<Path> tryTakeScreenshotIfNeeded(IntegratedServer server, Operation<Optional<Path>> original) {
+    Optional<Path> worldScreenshotFile = original.call(server);
+    if(!this.singleWorldUtils$updateWorldIcon()) {
+      return worldScreenshotFile;
+    }
+
+    // Skip vanilla's "icon already exists" check so the icon is replaced once per session
+    worldScreenshotFile.ifPresent(this::takeAutoScreenshot);
     return Optional.empty();
   }
 
@@ -65,5 +72,10 @@ public abstract class MixinGameRenderer {
     this.updateWorldIcon$screenshot = false;
   }
 
+  @Unique
+  private boolean singleWorldUtils$updateWorldIcon() {
+    SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
+    return configuration.enabled().get() && configuration.worldIcon().get();
+  }
 
 }

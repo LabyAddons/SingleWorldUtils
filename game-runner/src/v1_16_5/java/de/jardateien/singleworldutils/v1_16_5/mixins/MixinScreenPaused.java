@@ -1,29 +1,30 @@
 package de.jardateien.singleworldutils.v1_16_5.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import de.jardateien.singleworldutils.SingleWorldUtils;
+import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.server.IntegratedServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Minecraft.class)
 public class MixinScreenPaused {
 
-  @Redirect(
+  @ModifyExpressionValue(
       method = "runTick",
       at = @At(
           value = "INVOKE",
           target = "Lnet/minecraft/client/gui/screens/Screen;isPauseScreen()Z"
       ))
-  private boolean singleplayer$disablePause(Screen screen) {
-    if(this.singleWorld$isSingleplayer() && SingleWorldUtils.instance.configuration().unpaused().get()) {
+  private boolean singleplayer$disablePause(boolean original) {
+    SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
+    if(original && configuration.enabled().get() && configuration.unpaused().get() && this.singleWorld$isSingleplayer()) {
       return false;
     }
 
-    return screen.isPauseScreen();
+    return original;
   }
 
   @Unique

@@ -1,13 +1,13 @@
 package de.jardateien.singleworldutils.v1_16_5.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import de.jardateien.singleworldutils.SingleWorldUtils;
+import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.server.IntegratedServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
@@ -16,28 +16,28 @@ public abstract class MixinGameRenderer {
   @Unique
   private boolean updateWorldIcon$screenshot;
 
-  @Redirect(
+  @ModifyExpressionValue(
       method = "render",
       at = @At(value = "INVOKE", target = "Lnet/minecraft/client/server/IntegratedServer;hasWorldScreenshot()Z")
   )
-  private boolean tryTakeScreenshotIfNeeded(IntegratedServer server) {
-    if(SingleWorldUtils.instance.configuration().enabled().get() && SingleWorldUtils.instance.configuration().worldIcon().get()) {
+  private boolean tryTakeScreenshotIfNeeded(boolean original) {
+    if(this.singleWorldUtils$updateWorldIcon()) {
       return this.updateWorldIcon$screenshot;
     }
 
-    return server.hasWorldScreenshot();
+    return original;
   }
 
-  @Redirect(
+  @ModifyExpressionValue(
       method = "takeAutoScreenshot",
       at = @At(value = "INVOKE", target = "Lnet/minecraft/client/server/IntegratedServer;hasWorldScreenshot()Z")
   )
-  private boolean hasWorldScreenshot(IntegratedServer server) {
-    if(SingleWorldUtils.instance.configuration().enabled().get() && SingleWorldUtils.instance.configuration().worldIcon().get()) {
+  private boolean hasWorldScreenshot(boolean original) {
+    if(this.singleWorldUtils$updateWorldIcon()) {
       return this.updateWorldIcon$screenshot;
     }
 
-    return server.hasWorldScreenshot();
+    return original;
   }
 
   @Inject(
@@ -56,5 +56,10 @@ public abstract class MixinGameRenderer {
     this.updateWorldIcon$screenshot = false;
   }
 
+  @Unique
+  private boolean singleWorldUtils$updateWorldIcon() {
+    SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
+    return configuration.enabled().get() && configuration.worldIcon().get();
+  }
 
 }
