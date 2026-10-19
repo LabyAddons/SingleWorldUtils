@@ -31,7 +31,7 @@ public class MixinWorldSelection {
 
   @Inject(method = "render", at = @At("TAIL"))
   private void render(PoseStack lvt_1_1_, int lvt_2_1_, int lvt_3_1_, int lvt_4_1_, int lvt_5_1_, int lvt_6_1_, int lvt_7_1_, int lvt_8_1_, boolean lvt_9_1_, float lvt_10_1_, CallbackInfo ci) {
-    if(!SingleWorldUtils.instance.configuration().enabled().get() || !SingleWorldUtils.instance.configuration().playTime().get())
+    if(!SingleWorldUtils.isPlaytimeEnabled())
       return;
 
     if(!this.singleWorldUtils$playtime.isRequested()) {

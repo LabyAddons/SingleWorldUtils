@@ -6,7 +6,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import java.nio.file.Path;
 import java.util.Optional;
 import de.jardateien.singleworldutils.SingleWorldUtils;
-import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.server.IntegratedServer;
 import org.objectweb.asm.Opcodes;
@@ -73,8 +72,7 @@ public abstract class MixinGameRenderer {
 
   @Unique
   private boolean singleWorldUtils$updateWorldIcon() {
-    SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
-    return configuration.enabled().get() && configuration.worldIcon().get();
+    return SingleWorldUtils.isWorldIconEnabled();
   }
 
 }

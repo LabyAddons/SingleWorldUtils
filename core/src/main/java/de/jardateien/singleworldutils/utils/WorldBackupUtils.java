@@ -31,13 +31,11 @@ public final class WorldBackupUtils {
    * @param gameDirectory  the Minecraft game directory, used for the default backup folder
    */
   public static void backupWorld(Path worldDirectory, Path gameDirectory) {
-    SingleWorldUtils addon = SingleWorldUtils.instance;
-    if (addon == null)
+    if (!SingleWorldUtils.isBackupEnabled())
       return;
 
+    SingleWorldUtils addon = SingleWorldUtils.instance;
     SingleWorldUtilsConfiguration configuration = addon.configuration();
-    if (!configuration.enabled().get() || !configuration.backup().get())
-      return;
 
     try {
       if (worldDirectory == null || !Files.isDirectory(worldDirectory))

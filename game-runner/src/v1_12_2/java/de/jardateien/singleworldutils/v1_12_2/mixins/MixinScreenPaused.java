@@ -2,7 +2,6 @@ package de.jardateien.singleworldutils.v1_12_2.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import de.jardateien.singleworldutils.SingleWorldUtils;
-import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
 import net.minecraft.client.Minecraft;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,8 +22,7 @@ public abstract class MixinScreenPaused {
           opcode = Opcodes.GETFIELD)
   )
   private boolean singleplayer$disablePause(boolean original) {
-    SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
-    if(original && configuration.enabled().get() && configuration.unpaused().get() && this.isSingleplayer()) {
+    if(original && SingleWorldUtils.isUnpausedEnabled() && this.isSingleplayer()) {
       return false;
     }
 

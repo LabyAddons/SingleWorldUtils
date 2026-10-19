@@ -2,7 +2,6 @@ package de.jardateien.singleworldutils.v1_16_5.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import de.jardateien.singleworldutils.SingleWorldUtils;
-import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -58,8 +57,7 @@ public abstract class MixinGameRenderer {
 
   @Unique
   private boolean singleWorldUtils$updateWorldIcon() {
-    SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
-    return configuration.enabled().get() && configuration.worldIcon().get();
+    return SingleWorldUtils.isWorldIconEnabled();
   }
 
 }

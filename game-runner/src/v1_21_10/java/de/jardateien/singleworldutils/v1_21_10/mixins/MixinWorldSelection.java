@@ -31,7 +31,7 @@ public class MixinWorldSelection {
 
   @Inject(method = "renderContent", at = @At("TAIL"))
   private void render(GuiGraphics $$0, int $$1, int $$2, boolean $$3, float $$4, CallbackInfo ci) {
-    if(!SingleWorldUtils.instance.configuration().enabled().get() || !SingleWorldUtils.instance.configuration().playTime().get())
+    if(!SingleWorldUtils.isPlaytimeEnabled())
       return;
 
     WorldSelectionList.WorldListEntry entry = (WorldSelectionList.WorldListEntry) (Object) this;
