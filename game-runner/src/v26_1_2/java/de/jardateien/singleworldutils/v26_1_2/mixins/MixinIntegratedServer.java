@@ -1,20 +1,16 @@
 package de.jardateien.singleworldutils.v26_1_2.mixins;
 
-import de.jardateien.singleworldutils.SingleWorldUtils;
-import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
 import de.jardateien.singleworldutils.utils.WorldBackupUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.LevelStorageSource.LevelStorageAccess;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Mixin(MinecraftServer.class)
 public class MixinIntegratedServer {
@@ -28,27 +24,10 @@ public class MixinIntegratedServer {
       at = @At("TAIL")
   )
   private void singleWorldUtils$backupWorld(CallbackInfo ci) {
-    Path path = this.singleWorldUtils$pathSaves();
-    if (path == null)
-      return;
-
-    WorldBackupUtils.createBackup(path.resolve(this.storageSource.getLevelId()), path.resolve("backups"));
-  }
-
-  @Unique
-  private Path singleWorldUtils$pathSaves() {
-    SingleWorldUtilsConfiguration configuration = SingleWorldUtils.instance.configuration();
-
-    if(configuration.enabled().get() && configuration.backup().get()) {
-      String customPath = configuration.customSavesPath().get();
-      if(configuration.customSaves().get() && !customPath.isBlank()) {
-        return Paths.get(customPath).resolve("saves");
-      } else {
-        return Paths.get(Minecraft.getInstance().gameDirectory.getPath()).resolve("saves");
-      }
-    }
-
-    return null;
+    WorldBackupUtils.backupWorld(
+        this.storageSource.getLevelPath(LevelResource.ROOT),
+        Minecraft.getInstance().gameDirectory.toPath()
+    );
   }
 
 }

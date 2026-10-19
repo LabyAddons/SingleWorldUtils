@@ -1,4 +1,4 @@
-package de.jardateien.singleworldutils.v26_3;
+package de.jardateien.singleworldutils.v26_2.mixins;
 
 import de.jardateien.singleworldutils.SingleWorldUtils;
 import de.jardateien.singleworldutils.utils.WorldPlaytime;

@@ -1,64 +1,91 @@
 package de.jardateien.singleworldutils.utils;
 
+import de.jardateien.singleworldutils.SingleWorldUtils;
+import de.jardateien.singleworldutils.SingleWorldUtilsConfiguration;
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Stream;
 
 public final class WorldBackupUtils {
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy-HH:mm:ss");
+  // No ":" in the pattern, Windows doesn't allow it in file names
+  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+  private static final String DEFAULT_BACKUP_FOLDER = "backups";
+  private static final String SESSION_LOCK = "session.lock";
 
-    public static void createBackup(Path worldDirectory, Path backupDirectory) {
-        if (worldDirectory == null || !Files.exists(worldDirectory))
-            return;
+  private WorldBackupUtils() {
+  }
 
-        try {
-            Files.createDirectories(backupDirectory);
+  /**
+   * Creates a backup of the given world if backups are enabled in the settings.
+   * Never throws, so it is safe to call while the server is stopping.
+   *
+   * @param worldDirectory the folder of the world that was just closed
+   * @param gameDirectory  the Minecraft game directory, used for the default backup folder
+   */
+  public static void backupWorld(Path worldDirectory, Path gameDirectory) {
+    SingleWorldUtils addon = SingleWorldUtils.instance;
+    if (addon == null)
+      return;
 
-            String worldName = worldDirectory.getFileName().toString();
-            String timestamp = LocalDateTime.now().format(DATE_FORMAT);
+    SingleWorldUtilsConfiguration configuration = addon.configuration();
+    if (!configuration.enabled().get() || !configuration.backup().get())
+      return;
 
-            Path backupWorldDirectory = backupDirectory.resolve(worldName).resolve(timestamp);
-            Files.createDirectories(backupWorldDirectory);
+    try {
+      if (worldDirectory == null || !Files.isDirectory(worldDirectory))
+        return;
 
-            copyDirectory(worldDirectory, backupWorldDirectory);
+      Path worldPath = worldDirectory.toAbsolutePath().normalize();
+      Path backupPath = resolveBackupFolder(configuration, gameDirectory)
+          .resolve(worldPath.getFileName().toString())
+          .resolve(LocalDateTime.now().format(DATE_FORMAT));
 
-            System.out.println("[SingleWorldUtils] Backup created: " + backupWorldDirectory);
+      copyDirectory(worldPath, backupPath);
+      addon.logger().info("Backup created: " + backupPath);
+    } catch (Exception exception) {
+      addon.logger().error("Failed to create world backup!", exception);
+    }
+  }
 
-        } catch (IOException exception) {
-            System.err.println("[SingleWorldUtils] Failed to create world backup!");
-            exception.printStackTrace();
-        }
+  private static Path resolveBackupFolder(SingleWorldUtilsConfiguration configuration, Path gameDirectory) {
+    String customFolder = configuration.backupFolder().get();
+    if (configuration.customBackupFolder().get() && customFolder != null && !customFolder.isBlank()) {
+      // resolve() keeps absolute paths and makes relative ones relative to the game directory
+      return gameDirectory.resolve(customFolder.trim());
     }
 
-    private static void copyDirectory(Path source, Path target) throws IOException {
+    return gameDirectory.resolve(DEFAULT_BACKUP_FOLDER);
+  }
 
-        try (Stream<Path> paths = Files.walk(source)) {
-            paths.forEach(sourcePath -> {
+  private static void copyDirectory(Path source, Path target) throws IOException {
+    Files.walkFileTree(source, new SimpleFileVisitor<>() {
+      @Override
+      public @NotNull FileVisitResult preVisitDirectory(@NotNull Path directory, @NotNull BasicFileAttributes attributes) throws IOException {
+        Files.createDirectories(target.resolve(source.relativize(directory).toString()));
+        return FileVisitResult.CONTINUE;
+      }
 
-                try {
-                    Path relativePath = source.relativize(sourcePath);
-                    Path targetPath = target.resolve(relativePath);
+      @Override
+      public @NotNull FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attributes) throws IOException {
+        if (SESSION_LOCK.equals(file.getFileName().toString()))
+          return FileVisitResult.CONTINUE;
 
-                    if (Files.isDirectory(sourcePath)) {
-                        Files.createDirectories(targetPath);
-                    } else {
-                        Files.copy(
-                                sourcePath,
-                                targetPath,
-                                StandardCopyOption.REPLACE_EXISTING,
-                                StandardCopyOption.COPY_ATTRIBUTES
-                        );
-                    }
-
-                } catch (IOException exception) {
-                    throw new RuntimeException(exception);
-                }
-            });
-        }
-    }
+        Files.copy(
+            file,
+            target.resolve(source.relativize(file).toString()),
+            StandardCopyOption.REPLACE_EXISTING,
+            StandardCopyOption.COPY_ATTRIBUTES
+        );
+        return FileVisitResult.CONTINUE;
+      }
+    });
+  }
 }

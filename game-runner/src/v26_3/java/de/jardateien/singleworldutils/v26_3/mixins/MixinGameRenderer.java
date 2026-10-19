@@ -1,4 +1,4 @@
-package de.jardateien.singleworldutils.v26_3;
+package de.jardateien.singleworldutils.v26_3.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

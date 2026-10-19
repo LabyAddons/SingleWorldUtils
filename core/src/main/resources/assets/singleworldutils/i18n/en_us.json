@@ -17,8 +17,8 @@
         "settings": {
           "name": "Settings"
         },
-        "saves": {
-          "name": "Saves"
+        "backups": {
+          "name": "Backups"
         }
       },
       "playTime": {
@@ -37,13 +37,13 @@
         "name": "Backup",
         "description": "Automatically creates a backup of your world when you leave it."
       },
-      "customSaves": {
-        "name": "Custom Saves",
-        "description": "Custom location for your Minecraft worlds."
+      "customBackupFolder": {
+        "name": "Custom Backup Folder",
+        "description": "Stores world backups in a folder of your choice instead of the \"backups\" folder in your Minecraft directory."
       },
-      "customSavesPath": {
-        "name": "Save Path",
-        "description": "Set the folder where your Minecraft worlds are stored."
+      "backupFolder": {
+        "name": "Backup Folder",
+        "description": "The folder where world backups are stored. Relative paths start from your Minecraft directory."
       }
     }
   }

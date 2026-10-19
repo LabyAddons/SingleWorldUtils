@@ -43,14 +43,15 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   @SwitchSetting
   private final ConfigProperty<Boolean> backup = new ConfigProperty<>(true);
 
-  @SettingSection(value = "saves")
+  @SettingSection(value = "backups")
+  @SettingRequires(value = "backup")
   @SpriteSlot(x = 7)
   @SwitchSetting
-  private final ConfigProperty<Boolean> customSaves = new ConfigProperty<>(true);
-  @SettingRequires(value = "customSaves")
+  private final ConfigProperty<Boolean> customBackupFolder = new ConfigProperty<>(false);
+  @SettingRequires(value = "customBackupFolder")
   @SpriteSlot(x = 4)
   @TextFieldSetting
-  private final ConfigProperty<String> customSavesPath = new ConfigProperty<>("customSaves");
+  private final ConfigProperty<String> backupFolder = new ConfigProperty<>("backups");
 
   @Override
   public ConfigProperty<Boolean> enabled() {
@@ -70,10 +71,10 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
     return this.backup;
   }
 
-  public ConfigProperty<String> customSavesPath() {
-    return this.customSavesPath;
+  public ConfigProperty<Boolean> customBackupFolder() {
+    return this.customBackupFolder;
   }
-  public ConfigProperty<Boolean> customSaves() {
-    return this.customSaves;
+  public ConfigProperty<String> backupFolder() {
+    return this.backupFolder;
   }
 }
