@@ -3,6 +3,8 @@ package de.jardateien.singleworldutils.v1_12_2.mixins;
 import com.mojang.authlib.GameProfile;
 import de.jardateien.singleworldutils.SingleWorldUtils;
 import de.jardateien.singleworldutils.utils.WorldPlaytime;
+import de.jardateien.singleworldutils.utils.WorldSize;
+import java.nio.file.Path;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListWorldSelectionEntry;
 import net.minecraft.world.storage.WorldSummary;
@@ -28,28 +30,43 @@ public class MixinWorldSelection {
   @Unique
   private final WorldPlaytime singleWorldUtils$playtime = new WorldPlaytime();
 
+  @Unique
+  private final WorldSize singleWorldUtils$worldSize = new WorldSize();
+
   @Inject(method = "drawEntry", at = @At("TAIL"))
-  private void drawEntry(int lvt_1_1_, int lvt_2_1_, int lvt_3_1_, int lvt_4_1_, int lvt_5_1_, int lvt_6_1_, int lvt_7_1_, boolean lvt_8_1_, float lvt_9_1_, CallbackInfo ci) {
-    if(!SingleWorldUtils.isPlaytimeEnabled())
+  private void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks, CallbackInfo ci) {
+    boolean playtimeEnabled = SingleWorldUtils.isPlaytimeEnabled();
+    boolean worldSizeEnabled = SingleWorldUtils.isWorldSizeEnabled();
+    if(!playtimeEnabled && !worldSizeEnabled)
       return;
 
-    if(!this.singleWorldUtils$playtime.isRequested()) {
-      GameProfile profile = this.client.getSession().getProfile();
-      if(profile == null)
-        return;
+    if(playtimeEnabled) {
+      if(!this.singleWorldUtils$playtime.isRequested()) {
+        GameProfile profile = this.client.getSession().getProfile();
+        if(profile != null)
+          this.singleWorldUtils$playtime.request(this.singleWorldUtils$worldDirectory(), profile.getId());
+      }
 
-      // Same directory vanilla passes to its save loader; no SaveHandler (it would write session.lock)
-      this.singleWorldUtils$playtime.request(
-          this.client.gameDir.toPath().resolve("saves").resolve(this.worldSummary.getFileName()),
-          profile.getId()
-      );
+      String playtime = this.singleWorldUtils$playtime.get();
+      if(playtime != null)
+        this.client.fontRenderer.drawString(playtime, x + 150, y, 0xFFAAAAAA);
     }
 
-    String playtime = this.singleWorldUtils$playtime.get();
-    if(playtime == null)
-      return;
+    if(worldSizeEnabled) {
+      if(!this.singleWorldUtils$worldSize.isRequested())
+        this.singleWorldUtils$worldSize.request(this.singleWorldUtils$worldDirectory());
 
-    this.client.fontRenderer.drawString(playtime, lvt_2_1_ + 150, lvt_3_1_, 0xFFAAAAAA);
+      String size = this.singleWorldUtils$worldSize.get();
+      if(size != null) {
+        int width = this.client.fontRenderer.getStringWidth(size);
+        this.client.fontRenderer.drawString(size, x + listWidth - 4 - width, y + this.client.fontRenderer.FONT_HEIGHT + 3, 0xFFAAAAAA);
+      }
+    }
+  }
+
+  @Unique
+  private Path singleWorldUtils$worldDirectory() {
+    return this.client.gameDir.toPath().resolve("saves").resolve(this.worldSummary.getFileName());
   }
 
 }

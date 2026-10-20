@@ -50,7 +50,6 @@ public abstract class MixinGameRenderer {
       return worldScreenshotFile;
     }
 
-    // Skip vanilla's "icon already exists" check so the icon is replaced once per session
     worldScreenshotFile.ifPresent(this::takeAutoScreenshot);
     return Optional.empty();
   }

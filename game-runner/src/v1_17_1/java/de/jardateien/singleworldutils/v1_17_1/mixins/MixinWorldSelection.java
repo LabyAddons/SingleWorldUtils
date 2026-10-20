@@ -3,6 +3,8 @@ package de.jardateien.singleworldutils.v1_17_1.mixins;
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.jardateien.singleworldutils.SingleWorldUtils;
 import de.jardateien.singleworldutils.utils.WorldPlaytime;
+import de.jardateien.singleworldutils.utils.WorldSize;
+import java.nio.file.Path;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.User;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
@@ -29,27 +31,42 @@ public class MixinWorldSelection {
   @Unique
   private final WorldPlaytime singleWorldUtils$playtime = new WorldPlaytime();
 
+  @Unique
+  private final WorldSize singleWorldUtils$worldSize = new WorldSize();
+
   @Inject(method = "render", at = @At("TAIL"))
-  private void render(PoseStack lvt_1_1_, int lvt_2_1_, int lvt_3_1_, int lvt_4_1_, int lvt_5_1_, int lvt_6_1_, int lvt_7_1_, int lvt_8_1_, boolean lvt_9_1_, float lvt_10_1_, CallbackInfo ci) {
-    if(!SingleWorldUtils.isPlaytimeEnabled())
+  private void render(PoseStack poseStack, int index, int top, int left, int width, int height, int mouseX,
+      int mouseY, boolean hovered, float partialTick, CallbackInfo ci) {
+    boolean playtimeEnabled = SingleWorldUtils.isPlaytimeEnabled();
+    boolean worldSizeEnabled = SingleWorldUtils.isWorldSizeEnabled();
+    if(!playtimeEnabled && !worldSizeEnabled)
       return;
 
-    if(!this.singleWorldUtils$playtime.isRequested()) {
-      User user = this.minecraft.getUser();
-      if(user == null)
-        return;
+    if(playtimeEnabled) {
+      if(!this.singleWorldUtils$playtime.isRequested()) {
+        User user = this.minecraft.getUser();
+        if(user != null)
+          this.singleWorldUtils$playtime.request(this.singleWorldUtils$worldDirectory(), user.getGameProfile().getId());
+      }
 
-      this.singleWorldUtils$playtime.request(
-          this.minecraft.getLevelSource().getBaseDir().resolve(this.summary.getLevelId()),
-          user.getGameProfile().getId()
-      );
+      String playtime = this.singleWorldUtils$playtime.get();
+      if(playtime != null)
+        this.minecraft.font.drawShadow(poseStack, playtime, left + 150, top, 0xFFAAAAAA);
     }
 
-    String playtime = this.singleWorldUtils$playtime.get();
-    if(playtime == null)
-      return;
+    if(worldSizeEnabled) {
+      if(!this.singleWorldUtils$worldSize.isRequested())
+        this.singleWorldUtils$worldSize.request(this.singleWorldUtils$worldDirectory());
 
-    this.minecraft.font.drawShadow(lvt_1_1_, playtime, lvt_2_1_ + 150, lvt_3_1_, 0xFFAAAAAA);
+      String size = this.singleWorldUtils$worldSize.get();
+      if(size != null)
+        this.minecraft.font.drawShadow(poseStack, size, left + width - 4 - this.minecraft.font.width(size), top + this.minecraft.font.lineHeight + 3, 0xFFAAAAAA);
+    }
+  }
+
+  @Unique
+  private Path singleWorldUtils$worldDirectory() {
+    return this.minecraft.getLevelSource().getBaseDir().resolve(this.summary.getLevelId());
   }
 
 }

@@ -18,7 +18,7 @@ public class TimeUtils {
     long seconds = totalSeconds % 60;
 
     if (days > 0) {
-      return String.format("%dd %02d:%02d:%02d", days, hours, minutes, seconds);
+      return String.format("%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
     }
 
     if (hours > 0) {
@@ -38,12 +38,10 @@ public class TimeUtils {
       String json = Files.readString(stats);
       JsonObject root = JsonParser.parseString(json).getAsJsonObject();
 
-      // 1.8 - 1.12
       if (root.has("stat.playOneMinute")) {
         return root.get("stat.playOneMinute").getAsLong();
       }
 
-      // 1.13+
       if (root.has("stats")) {
         JsonObject custom = root
             .getAsJsonObject("stats")

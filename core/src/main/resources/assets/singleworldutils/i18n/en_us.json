@@ -1,5 +1,13 @@
 {
   "singleworldutils": {
+    "size": {
+      "decimal": ".",
+      "b": "%s B",
+      "kb": "%s KB",
+      "mb": "%s MB",
+      "gb": "%s GB",
+      "tb": "%s TB"
+    },
     "settings": {
       "enabled": {
         "name": "Enabled",
@@ -25,6 +33,10 @@
         "name": "Show Playtime",
         "description": "Displays the total playtime for each world in the world selection screen."
       },
+      "worldSize": {
+        "name": "Show World Size",
+        "description": "Displays the disk space used by each world in the world selection screen."
+      },
       "worldIcon": {
         "name": "Update World Icons",
         "description": "Updates world icons when entering a world to keep them up to date."
@@ -35,7 +47,7 @@
       },
       "backup": {
         "name": "Backup",
-        "description": "Automatically creates a backup of your world when you leave it."
+        "description": "Automatically creates a ZIP backup of your world in the background when you leave it."
       },
       "customBackupFolder": {
         "name": "Custom Backup Folder",
@@ -44,6 +56,10 @@
       "backupFolder": {
         "name": "Backup Folder",
         "description": "The folder where world backups are stored. Relative paths start from your Minecraft directory."
+      },
+      "maxBackups": {
+        "name": "Max Backups per World",
+        "description": "The oldest backups of a world are deleted once this limit is reached. 0 = unlimited."
       }
     }
   }

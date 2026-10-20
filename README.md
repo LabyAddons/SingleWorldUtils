@@ -10,7 +10,8 @@ SingleWorldUtils is a lightweight addon built around one simple idea: **making s
 * **⏸️ Pause Control** — Decide whether your world should continue running when opening the pause menu.
 * **⌚ World Playtime** — See how long you've played each world directly in the world selection.
 * **🖼️ World Icons** — Automatically refresh your world icon whenever you enter the world.
-* **💾 World Backups** — Automatically back up your world when you leave it (stored in `.minecraft/backups` or a folder of your choice).
+* **📏 World Size** — See how much disk space each world uses directly in the world selection.
+* **💾 World Backups** — Automatically back up your world as a ZIP in the background when you leave it (stored in `.minecraft/backups` or a folder of your choice). Old backups are cleaned up automatically.
 
 ### 📦 Installation
 

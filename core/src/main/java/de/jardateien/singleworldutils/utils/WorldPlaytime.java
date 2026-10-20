@@ -5,10 +5,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Playtime of a single world in the world selection list. The stats file is read once off the
- * render thread; rendering only reads the cached string.
- */
 public final class WorldPlaytime {
 
   private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(runnable -> {
@@ -32,9 +28,6 @@ public final class WorldPlaytime {
     EXECUTOR.execute(() -> this.formatted = TimeUtils.formatPlaytime(TimeUtils.getPlaytime(worldDirectory, uuid)));
   }
 
-  /**
-   * @return the formatted playtime, or null while it is still loading
-   */
   public String get() {
     return this.formatted;
   }

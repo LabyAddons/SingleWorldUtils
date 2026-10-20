@@ -3,6 +3,7 @@ package de.jardateien.singleworldutils;
 import net.labymod.api.Laby;
 import net.labymod.api.addon.AddonConfig;
 import net.labymod.api.client.gui.screen.widget.widgets.input.ButtonWidget.ButtonSetting;
+import net.labymod.api.client.gui.screen.widget.widgets.input.SliderWidget.SliderSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.TextFieldWidget.TextFieldSetting;
 import net.labymod.api.configuration.loader.annotation.ConfigName;
@@ -36,6 +37,9 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   @SpriteSlot(x = 5)
   @SwitchSetting
   private final ConfigProperty<Boolean> playTime = new ConfigProperty<>(true);
+  @SpriteSlot(y = 1)
+  @SwitchSetting
+  private final ConfigProperty<Boolean> worldSize = new ConfigProperty<>(true);
   @SpriteSlot(x = 6)
   @SwitchSetting
   private final ConfigProperty<Boolean> unpaused = new ConfigProperty<>(true);
@@ -52,6 +56,9 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   @SpriteSlot(x = 4)
   @TextFieldSetting
   private final ConfigProperty<String> backupFolder = new ConfigProperty<>("backups");
+  @SpriteSlot(x = 2)
+  @SliderSetting(min = 0, max = 50)
+  private final ConfigProperty<Integer> maxBackups = new ConfigProperty<>(5);
 
   @Override
   public ConfigProperty<Boolean> enabled() {
@@ -62,6 +69,9 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   }
   public ConfigProperty<Boolean> playTime() {
     return this.playTime;
+  }
+  public ConfigProperty<Boolean> worldSize() {
+    return this.worldSize;
   }
   public ConfigProperty<Boolean> unpaused() {
     return this.unpaused;
@@ -76,5 +86,8 @@ public class SingleWorldUtilsConfiguration extends AddonConfig {
   }
   public ConfigProperty<String> backupFolder() {
     return this.backupFolder;
+  }
+  public ConfigProperty<Integer> maxBackups() {
+    return this.maxBackups;
   }
 }

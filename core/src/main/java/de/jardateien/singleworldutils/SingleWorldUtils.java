@@ -21,17 +21,16 @@ public class SingleWorldUtils extends LabyAddon<SingleWorldUtilsConfiguration> {
     return SingleWorldUtilsConfiguration.class;
   }
 
-  /*
-   * The mixins call these checks. They return false until the addon is enabled, so a mixin that
-   * runs early (e.g. in Minecraft#runTick) never touches a missing instance.
-   */
-
   public static boolean isWorldIconEnabled() {
     return isFeatureEnabled(instance == null ? null : instance.configuration().worldIcon());
   }
 
   public static boolean isPlaytimeEnabled() {
     return isFeatureEnabled(instance == null ? null : instance.configuration().playTime());
+  }
+
+  public static boolean isWorldSizeEnabled() {
+    return isFeatureEnabled(instance == null ? null : instance.configuration().worldSize());
   }
 
   public static boolean isUnpausedEnabled() {

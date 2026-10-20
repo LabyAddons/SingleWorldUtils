@@ -1,0 +1,66 @@
+{
+  "singleworldutils": {
+    "size": {
+      "decimal": ",",
+      "b": "%s B",
+      "kb": "%s KB",
+      "mb": "%s MB",
+      "gb": "%s GB",
+      "tb": "%s TB"
+    },
+    "settings": {
+      "enabled": {
+        "name": "Aktiviert",
+        "description": "Aktiviert oder deaktiviert das Addon."
+      },
+      "joinDiscord": {
+        "name": "Discord-Server",
+        "text": "Beitreten",
+        "description": "Klicke, um dem Discord beizutreten."
+      },
+      "header": {
+        "general": {
+          "name": "Allgemein"
+        },
+        "settings": {
+          "name": "Einstellungen"
+        },
+        "backups": {
+          "name": "Backups"
+        }
+      },
+      "playTime": {
+        "name": "Spielzeit anzeigen",
+        "description": "Zeigt die gesamte Spielzeit jeder Welt in der Weltauswahl an."
+      },
+      "worldSize": {
+        "name": "Weltgröße anzeigen",
+        "description": "Zeigt den belegten Speicherplatz jeder Welt in der Weltauswahl an."
+      },
+      "worldIcon": {
+        "name": "Welt-Icons aktualisieren",
+        "description": "Aktualisiert das Welt-Icon beim Betreten einer Welt, damit es aktuell bleibt."
+      },
+      "unpaused": {
+        "name": "Ohne Pause",
+        "description": "Lässt das Spiel weiterlaufen, auch wenn das Pausenmenü geöffnet ist."
+      },
+      "backup": {
+        "name": "Backup",
+        "description": "Erstellt beim Verlassen einer Welt automatisch im Hintergrund ein ZIP-Backup."
+      },
+      "customBackupFolder": {
+        "name": "Eigener Backup-Ordner",
+        "description": "Speichert Backups in einem Ordner deiner Wahl statt im Ordner \"backups\" in deinem Minecraft-Verzeichnis."
+      },
+      "backupFolder": {
+        "name": "Backup-Ordner",
+        "description": "Der Ordner, in dem Backups gespeichert werden. Relative Pfade beginnen in deinem Minecraft-Verzeichnis."
+      },
+      "maxBackups": {
+        "name": "Max. Backups pro Welt",
+        "description": "Die ältesten Backups einer Welt werden gelöscht, sobald dieses Limit erreicht ist. 0 = unbegrenzt."
+      }
+    }
+  }
+}
