@@ -21,16 +21,19 @@ public class MixinIntegratedServer {
   @Shadow
   private String worldName;
 
+  @Shadow
+  private String folderName;
+
   @Inject(
       method = "stopServer",
       at = @At("TAIL")
   )
   private void singleWorldUtils$backupWorld(CallbackInfo ci) {
-    if (this.anvilFile == null || this.worldName == null)
+    if (this.anvilFile == null || this.folderName == null)
       return;
 
     WorldBackupUtils.backupWorld(
-        new File(this.anvilFile, this.worldName).toPath(),
+        new File(this.anvilFile, this.folderName).toPath(),
         Minecraft.getMinecraft().gameDir.toPath()
     );
   }
